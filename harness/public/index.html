@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Model Test Harness</title>
+    <style>
+      :root {
+        --bg: #f7f7f5; --panel: #fff; --text: #1d1d1b; --muted: #6b6b66; --line: #e2e2dc;
+        --accent: #2f6fdb; --you: #e8f0fd; --tutor: #f1efe8; --warn: #b4570b;
+      }
+      @media (prefers-color-scheme: dark) {
+        :root {
+          --bg: #161615; --panel: #20201e; --text: #ecece8; --muted: #9a9a93; --line: #34342f;
+          --accent: #6b9cf0; --you: #1e2a40; --tutor: #2a2924; --warn: #e3974f;
+        }
+      }
+      * { box-sizing: border-box; }
+      body { margin: 0; font: 15px/1.45 system-ui, sans-serif; background: var(--bg); color: var(--text); }
+      header { padding: 14px 16px; border-bottom: 1px solid var(--line); display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
+      h1 { font-size: 17px; margin: 0 12px 0 0; }
+      select, button, textarea, input { font: inherit; color: inherit; }
+      select, textarea { background: var(--panel); border: 1px solid var(--line); border-radius: 6px; padding: 6px 8px; }
+      button { border: 0; border-radius: 6px; padding: 7px 14px; background: var(--accent); color: #fff; cursor: pointer; }
+      button:disabled { opacity: .45; cursor: default; }
+      #status { color: var(--muted); }
+      #timer { font-variant-numeric: tabular-nums; font-weight: 600; }
+      main { display: grid; grid-template-columns: 1fr 380px; gap: 16px; padding: 16px; }
+      @media (max-width: 900px) { main { grid-template-columns: 1fr; } }
+      section { background: var(--panel); border: 1px solid var(--line); border-radius: 8px; padding: 14px; }
+      h2 { font-size: 14px; text-transform: uppercase; letter-spacing: .04em; color: var(--muted); margin: 0 0 10px; }
+      #transcript { height: 62vh; overflow-y: auto; display: flex; flex-direction: column; gap: 8px; }
+      .turn { padding: 8px 10px; border-radius: 6px; max-width: 90%; white-space: pre-wrap; }
+      .turn.you { background: var(--you); align-self: flex-end; }
+      .turn.tutor { background: var(--tutor); }
+      .turn b { display: block; font-size: 12px; color: var(--muted); }
+      .log { font-size: 13px; color: var(--warn); }
+      #stats { display: grid; grid-template-columns: 1fr 1fr; gap: 4px 12px; font-size: 14px; margin-bottom: 14px; }
+      #stats span:nth-child(odd) { color: var(--muted); }
+      label.check { display: flex; gap: 8px; align-items: flex-start; padding: 4px 0; font-size: 14px; }
+      label.check small { color: var(--muted); display: block; }
+      .kind { font-size: 11px; color: var(--muted); }
+      .rating { display: flex; justify-content: space-between; align-items: center; margin: 6px 0; font-size: 14px; }
+      textarea { width: 100%; min-height: 70px; margin-top: 6px; }
+      ol { margin: 0 0 12px; padding-left: 20px; font-size: 14px; }
+      aside > section + section { margin-top: 16px; }
+    </style>
+  </head>
+  <body>
+    <header>
+      <h1>english-coach · model test</h1>
+      <select id="provider"></select>
+      <select id="style">
+        <option value="after-turn">Correct after my turn</option>
+        <option value="interject">Interject mid-turn</option>
+      </select>
+      <button id="start">Start</button>
+      <button id="stop" disabled>Stop</button>
+      <span id="timer">0:00</span>
+      <span id="status">Idle</span>
+      <audio id="audio" autoplay hidden></audio>
+    </header>
+    <main>
+      <section>
+        <h2>Transcript</h2>
+        <div id="transcript"></div>
+      </section>
+      <aside>
+        <section>
+          <h2>Measured</h2>
+          <div id="stats"></div>
+          <h2>Topics (in order)</h2>
+          <ol id="topics"></ol>
+          <h2>Planted mistakes — tick if corrected</h2>
+          <div id="planted"></div>
+        </section>
+        <section>
+          <h2>Your rating (1–5)</h2>
+          <div id="ratings"></div>
+          <textarea id="notes" placeholder="Notes: what felt natural, what annoyed you, missed corrections…"></textarea>
+          <p><button id="save" disabled>Save results</button> <span id="saved" class="kind"></span></p>
+        </section>
+      </aside>
+    </main>
+    <script type="module" src="app.js"></script>
+  </body>
+</html>

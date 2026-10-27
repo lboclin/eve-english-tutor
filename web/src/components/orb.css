@@ -1,0 +1,28 @@
+.orb { --lvl: 0; width: 230px; height: 230px; border-radius: 50%; display: grid; place-items: center; position: relative;
+  transition: transform .08s linear; transform: scale(calc(1 + var(--lvl) * .14)); }
+.orb::before { content: ""; position: absolute; inset: -18px; border-radius: 50%; opacity: calc(.25 + var(--lvl) * .9);
+  filter: blur(22px); transition: opacity .1s linear; z-index: -1; }
+
+/* Eve: EVE-like shell floating in a sky halo */
+.halo { position: absolute; inset: 0; border-radius: 50%; background: radial-gradient(circle at 50% 45%, var(--halo) 0%, var(--talk) 70%); }
+.orb.eve::before { background: var(--talk); }
+.eve-body { width: 78%; position: relative; animation: float 4.5s ease-in-out infinite; }
+.eve-body .eyes { animation: blink 5.5s infinite; transform-origin: 100px 98px; }
+.orb.eve.on .eve-body .eyes { animation: none; }
+
+/* You: a soft morphing creature */
+.orb.you::before { background: var(--mistake); }
+.blob { position: absolute; inset: 12%; background: linear-gradient(135deg, var(--mistake), var(--cards));
+  animation: morph 8s ease-in-out infinite, spin 24s linear infinite; border-radius: 42% 58% 63% 37% / 41% 44% 56% 59%; }
+.blob.inner { inset: 30%; background: linear-gradient(135deg, #fff9, #fff0); animation-duration: 6s, 18s; animation-direction: reverse; }
+.orb.you.on .blob { animation-duration: 2.2s, 10s; }
+
+@keyframes float { 50% { transform: translateY(-7px); } }
+@keyframes blink { 0%, 94%, 100% { transform: scaleY(1); } 96% { transform: scaleY(.1); } }
+@keyframes spin { to { rotate: 360deg; } }
+@keyframes morph {
+  0%, 100% { border-radius: 42% 58% 63% 37% / 41% 44% 56% 59%; }
+  33% { border-radius: 63% 37% 45% 55% / 55% 62% 38% 45%; }
+  66% { border-radius: 38% 62% 35% 65% / 62% 38% 62% 38%; }
+}
+@media (prefers-reduced-motion: reduce) { .orb *, .orb { animation: none !important; transition: none !important; } }

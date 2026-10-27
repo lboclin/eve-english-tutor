@@ -1,0 +1,256 @@
+/* Eve — soft pastel theme. Every color is a token here; components never hard-code colors. */
+:root {
+  --bg: #fbf8f3; /* cream */
+  --surface: #ffffff;
+  --surface-soft: #f5f1ea;
+  --ink: #3b3a48; /* soft ink, never pure black */
+  --ink-soft: #77758a;
+  --line: #ece6dc;
+
+  /* One pastel per area */
+  --talk: #bcd9f5; /* sky — Eve's eyes */
+  --talk-ink: #2f5f8f;
+  --cards: #d9d0f5; /* lavender */
+  --cards-ink: #5b4a9b;
+  --streak: #c4ead6; /* mint */
+  --streak-ink: #2f7556;
+  --mistake: #f8d3c1; /* peach */
+  --mistake-ink: #a2512c;
+  --news: #f6e7b4; /* butter */
+  --news-ink: #8a6d14;
+
+  /* Deck categories */
+  --cat-vocabulary: #d9d0f5;
+  --cat-collocations: #f5cfdc;
+  --cat-phrasal: #f6e7b4;
+  --cat-grammar: #f8d3c1;
+  --cat-pronunciation: #bfe5ea;
+
+  /* Soft tints for backgrounds (answers, transcript bubbles, card gradients) */
+  --talk-soft: #e8f3fd;
+  --cards-soft: #f0ecfb;
+  --good-soft: #e9f6ef;
+  --bad-soft: #fdf0e9;
+  --halo: #e3f1fd;
+  /* Streak calendar: 1 task, 2 tasks, all tasks */
+  --lvl-1: #cdeedd;
+  --lvl-2: #8fd3b0;
+  --lvl-3: #4fae84;
+  --streak-ring: var(--streak-ink); /* the current streak's outline in the calendar */
+  --topbar-bg: rgb(251 248 243 / 85%);
+
+  --radius: 20px;
+  --radius-sm: 12px;
+  --shadow: 0 1px 2px rgb(59 58 72 / 4%), 0 8px 24px rgb(59 58 72 / 6%);
+  font-family: "Nunito", ui-rounded, system-ui, sans-serif;
+  color: var(--ink);
+  background: var(--bg);
+  color-scheme: light;
+}
+
+/* Night mode: the same pastel areas, deepened, on a soft plum-grey. data-theme is set before the first paint
+   (index.html) and by tapping Eve's icon in the top bar (data/theme.ts). */
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --bg: #1d1c25;
+  --surface: #27262f;
+  --surface-soft: #32313c;
+  --ink: #ebe8f2;
+  --ink-soft: #a6a3b7;
+  --line: #3b3946;
+
+  --talk: #2e4a68;
+  --talk-ink: #a9d0f6;
+  --cards: #3e3664;
+  --cards-ink: #cdbff7;
+  --streak: #22493a;
+  --streak-ink: #9fe1bf;
+  --mistake: #5b3628;
+  --mistake-ink: #f4b89c;
+  --news: #4d4221;
+  --news-ink: #efd68b;
+
+  --cat-vocabulary: #3e3664;
+  --cat-collocations: #5a3448;
+  --cat-phrasal: #4d4221;
+  --cat-grammar: #5b3628;
+  --cat-pronunciation: #23484e;
+
+  --talk-soft: #243548;
+  --cards-soft: #2d2945;
+  --good-soft: #1f3a2f;
+  --bad-soft: #452a20;
+  --halo: #5a7fa6;
+  /* After Wispr Flow's dark calendar: busy days are a strong green, the pale shade is rare (1 task) */
+  --lvl-1: #b9e6cf;
+  --lvl-2: #78c49e;
+  --lvl-3: #2b8460;
+  --streak-ring: #2f9a6e;
+  --topbar-bg: rgb(29 28 37 / 85%);
+  --shadow: 0 1px 2px rgb(0 0 0 / 25%), 0 8px 24px rgb(0 0 0 / 30%);
+}
+
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--bg); color: var(--ink); font-size: 16px; line-height: 1.5; }
+button, input, textarea { font: inherit; color: inherit; }
+h1, h2, h3 { margin: 0; line-height: 1.2; }
+/* An explicit loaded weight + no synthesized bold: iOS drew the default-bold h1 smeared */
+h1 { font-weight: 800; }
+:root { font-synthesis: none; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
+a { color: inherit; }
+
+/* Layout */
+.page { max-width: 1180px; margin: 0 auto; padding: 24px 24px 64px; }
+.grid { display: grid; grid-template-columns: repeat(12, 1fr); gap: 20px; }
+.span-3 { grid-column: span 3; } .span-4 { grid-column: span 4; } .span-5 { grid-column: span 5; }
+.span-6 { grid-column: span 6; } .span-8 { grid-column: span 8; } .span-12 { grid-column: span 12; }
+@media (max-width: 980px) { .grid > * { grid-column: span 12; } }
+.row { display: flex; gap: 12px; align-items: center; flex-wrap: wrap; }
+.stack { display: flex; flex-direction: column; gap: 12px; }
+.spacer { flex: 1; }
+.muted { color: var(--ink-soft); }
+.small { font-size: 14px; }
+
+/* Cards (UI panels) */
+.panel { background: var(--surface); border-radius: var(--radius); padding: 22px; box-shadow: var(--shadow); }
+.panel h2 { font-size: 15px; font-weight: 800; letter-spacing: .02em; display: flex; align-items: center; gap: 8px; margin-bottom: 14px; }
+.dot { width: 10px; height: 10px; border-radius: 50%; display: inline-block; }
+
+/* Buttons */
+.btn { border: 0; border-radius: 999px; padding: 10px 20px; font-weight: 700; cursor: pointer; background: var(--surface-soft);
+  transition: transform .12s ease, filter .12s ease; }
+.btn:hover { filter: brightness(.97); }
+.btn:active { transform: scale(.97); }
+.btn:disabled { opacity: .45; cursor: default; transform: none; }
+.btn.talk { background: var(--talk); color: var(--talk-ink); }
+.btn.cards { background: var(--cards); color: var(--cards-ink); }
+.btn.streak { background: var(--streak); color: var(--streak-ink); }
+.btn.mistake { background: var(--mistake); color: var(--mistake-ink); }
+.btn.news { background: var(--news); color: var(--news-ink); }
+.btn.big { padding: 14px 34px; font-size: 18px; }
+.btn.round { width: 46px; height: 46px; padding: 0; font-size: 20px; }
+.btn.ghost { background: transparent; }
+.theme-switch { border: 0; background: none; padding: 0; display: grid; place-items: center; cursor: pointer; transition: transform .15s ease; }
+.theme-switch:active { transform: scale(.88) rotate(-12deg); }
+
+/* Top bar */
+.topbar { position: sticky; top: 0; z-index: 10; background: var(--topbar-bg); backdrop-filter: blur(8px); }
+.topbar .inner { max-width: 1180px; margin: 0 auto; padding: 14px 24px; display: flex; align-items: center; gap: 24px; }
+.logo { font-weight: 800; font-size: 22px; display: flex; align-items: center; gap: 8px; cursor: pointer; }
+.logo-streak { display: none; }
+.tabs { display: flex; gap: 4px; background: var(--surface-soft); padding: 4px; border-radius: 999px; }
+.tab { border: 0; background: transparent; padding: 7px 18px; border-radius: 999px; cursor: pointer; font-weight: 700; color: var(--ink-soft); }
+.tab.active { background: var(--surface); color: var(--ink); box-shadow: var(--shadow); }
+.chip { display: inline-flex; align-items: center; gap: 6px; padding: 4px 12px; border-radius: 999px; font-size: 13px; font-weight: 700; }
+.chip.topic { background: var(--news); color: var(--news-ink); white-space: nowrap; flex: none; }
+.chip.topic.fixed { width: 116px; justify-content: center; overflow: hidden; text-overflow: ellipsis; }
+
+/* Progress */
+.bar { height: 12px; background: var(--surface-soft); border-radius: 999px; overflow: hidden; }
+.bar > div { height: 100%; border-radius: 999px; transition: width .4s ease; }
+.mix { display: flex; height: 14px; border-radius: 999px; overflow: hidden; gap: 2px; }
+
+/* To-do */
+.todo { display: flex; gap: 12px; align-items: center; padding: 12px 14px; border-radius: var(--radius-sm); background: var(--surface-soft);
+  cursor: pointer; border: 0; width: 100%; text-align: left; }
+.todo .check { width: 24px; height: 24px; border-radius: 50%; border: 2px solid var(--line); display: grid; place-items: center; flex: none; font-size: 13px; }
+.todo.done { opacity: .6; }
+/* A picked answer in News: a dot centered in the ring, nearly filling it, in the ring's color */
+.todo .check .pick { width: 14px; height: 14px; border-radius: 50%; background: var(--news-ink); }
+.todo.done .check { background: var(--streak); border-color: var(--streak); color: var(--streak-ink); }
+.todo.done .label { text-decoration: line-through; }
+/* Today's news rows: tag · title · minutes; on a phone the title gets its own full-width line */
+.todo.news-item { display: grid; grid-template-columns: auto 1fr auto; grid-template-areas: "chip title min"; column-gap: 12px; }
+.news-item > .chip { grid-area: chip; } .news-item > .label { grid-area: title; } .news-item > .minutes { grid-area: min; white-space: nowrap; }
+
+/* Toast */
+.toast { position: fixed; bottom: 28px; left: 50%; transform: translateX(-50%); background: var(--ink); color: var(--bg);
+  padding: 12px 22px; border-radius: 999px; font-weight: 700; box-shadow: var(--shadow); animation: rise .25s ease; z-index: 50; }
+@keyframes rise { from { opacity: 0; transform: translate(-50%, 10px); } }
+
+/* Preview banner: marks screens whose data is mocked until its milestone */
+.preview { font-size: 13px; color: var(--ink-soft); background: var(--surface-soft); border-radius: 999px; padding: 4px 12px; display: inline-block; }
+
+/* Flash card */
+.flash { min-height: 260px; display: grid; place-items: center; text-align: center; font-size: 22px; padding: 32px; }
+.flash .card-pencil { position: absolute; top: 10px; right: 10px; width: 38px; height: 38px; display: grid; place-items: center; color: var(--ink-soft); box-shadow: none; }
+.flash .card-pencil:hover { color: var(--ink); background: var(--surface-soft); }
+.card-edit { min-height: 56px; padding: 12px 14px; border: 2px solid var(--line); border-radius: var(--radius-sm); background: var(--surface); font-size: 18px; text-align: center; }
+.card-edit:focus { outline: none; border-color: var(--cards); }
+.flash .back { border-top: 2px dashed var(--line); margin-top: 20px; padding-top: 20px; font-size: 18px; }
+
+textarea.input { width: 100%; min-height: 120px; border: 2px solid var(--line); border-radius: var(--radius-sm); padding: 14px; background: var(--surface); resize: vertical; }
+textarea.input:focus { outline: none; border-color: var(--cards); }
+input.text-input { flex: 1; min-width: 0; max-width: 360px; border: 2px solid var(--line); border-radius: 999px; padding: 8px 14px; background: var(--surface); font-size: 16px; color: var(--ink); }
+input.text-input:focus { outline: none; border-color: var(--talk); }
+select.select { max-width: 240px; border: 2px solid var(--line); border-radius: 999px; padding: 6px 12px; background: var(--surface); font: inherit; color: inherit; }
+select.select:focus { outline: none; border-color: var(--talk); }
+select.select:disabled { opacity: .6; }
+
+/* Floating panel anchored under a text selection (News → Translate) */
+.popover { position: absolute; z-index: 20; background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius-sm);
+  box-shadow: var(--shadow); padding: 12px 14px; font-size: 16px; line-height: 1.5; }
+.popover-button { position: absolute; z-index: 20; transform: translateX(-50%); display: flex; flex-direction: column; align-items: center; }
+.popover-button .btn { box-shadow: var(--shadow); padding: 6px 16px; font-size: 15px; }
+.selection-tools .btn.round { width: 36px; height: 36px; padding: 0; display: inline-grid; place-items: center; flex: none; }
+.popover.selection-tools .btn.round { box-shadow: none; }
+
+/* Today */
+.news-list { position: relative; overflow-y: auto; overscroll-behavior: contain; }
+@media (min-width: 641px) { .deck-start { flex-direction: column; gap: 8px; } }
+/* Side by side with News (wide grid): the calendar takes the height News gives the row (contain: size keeps it
+   from setting that height itself) and sizes its squares to it; min-height covers a short News card. */
+@media (min-width: 981px) {
+  .streak-card { display: flex; flex-direction: column; }
+  .streak-card .streak-calendar { flex: 1; contain: size; min-height: 190px; justify-content: center; }
+}
+
+/* Talk screen header: the title centered on the same line as the back button */
+/* (Columns by number: the minifier rewrote grid-template-areas "back title ." to "back title.", which Safari rejected.) */
+.talk-head { width: 100%; display: grid; grid-template-columns: 46px 1fr 46px; align-items: center; }
+.talk-head > .btn { grid-column: 1; grid-row: 1; }
+.talk-head > h1 { grid-column: 2; grid-row: 1; text-align: center; }
+/* Mac: the title and everything under it sit 18px lower; the back button stays (Lucas's call) */
+@media (min-width: 641px) { .talk-head { margin-bottom: 18px; } .talk-head > h1 { position: relative; top: 18px; } }
+
+/* Phone (≤ 640px): flashcards and News on the iPhone. Live talk stays a Mac feature. */
+@media (max-width: 640px) {
+  .page { padding: 12px 16px 48px; }
+  .grid { gap: 14px; }
+  .panel { padding: 18px; }
+  h1 { font-size: 26px !important; }
+  .topbar .inner { padding: 10px 16px; gap: 10px; }
+  .logo .name { display: none; }
+  .tabs { flex: 1; justify-content: space-between; }
+  .topbar .tab { flex: 1; padding: 11px 4px; font-size: 16px; }
+  /* Tab bar at the bottom, like iPhone apps; the page leaves room for it (and for the home indicator) */
+  .topbar { position: fixed; top: auto; bottom: 0; left: 0; right: 0; border-top: 1px solid var(--line);
+    padding-bottom: env(safe-area-inset-bottom); }
+  .topbar .inner { padding: 10px 12px; }
+  /* "(Eve) | N" pill on the left instead of the streak chip on the right */
+  .logo { background: var(--surface-soft); border-radius: 999px; padding: 8px 12px; gap: 8px; font-size: 17px; }
+  .logo-streak { display: inline; border-left: 2px solid var(--line); padding-left: 9px; color: var(--streak-ink); }
+  .topbar .spacer, .streak-chip { display: none; }
+  .topbar .inner { gap: 8px; }
+  /* Extra top room: as a home-screen app, iOS blurs the strip under the status bar, so content starts below it */
+  .page { padding-top: calc(env(safe-area-inset-top) + 32px); padding-bottom: calc(88px + env(safe-area-inset-bottom)); }
+  .toast { bottom: calc(84px + env(safe-area-inset-bottom)); }
+  /* Talk fits one screen: title beside the back button, smaller orbs side by side, no device pickers */
+  .talk-screen { gap: 8px !important; }
+  .talk-timer { font-size: 26px !important; }
+  .style-tabs .tab { padding: 6px 12px; font-size: 13px; }
+  .talk-orbs { flex-direction: column; gap: 10px !important; margin: 0 !important; }
+  .talk-orbs .orb { width: 130px; height: 130px; }
+  .talk-orbs .orb::before { inset: -10px; filter: blur(14px); }
+  .talk-devices { display: none !important; }
+  .todo.news-item { grid-template-columns: auto 1fr; grid-template-areas: "chip min" "title title"; row-gap: 6px; }
+  .news-item > .minutes { justify-self: end; }
+  .news-item > .chip.fixed { width: auto; }
+  .btn.big { padding: 12px 22px; font-size: 16px; }
+  .flash { min-height: 220px; font-size: 20px; padding: 20px 12px; }
+  .grades { display: grid !important; grid-template-columns: 1fr 1fr; width: 100%; }
+  .grades > .btn { min-width: 0 !important; }
+}
+
+.fade-in { animation: fade .3s ease; }
+@keyframes fade { from { opacity: 0; transform: translateY(6px); } }
